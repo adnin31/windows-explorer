@@ -24,6 +24,20 @@ const folderCache = reactive(new Map<number, FolderChildrenResponse>());
 const parentById = reactive(new Map<number, number | null>());
 const folderNameById = reactive(new Map<number, string>());
 
+function resetWorkspaceState() {
+  roots.value = [];
+  selectedFolderId.value = null;
+  loadingRoots.value = false;
+  loadingFolderId.value = null;
+  errorMessage.value = "";
+  searchQuery.value = "";
+  uploading.value = false;
+  creatingFolder.value = false;
+  folderCache.clear();
+  parentById.clear();
+  folderNameById.clear();
+}
+
 function registerFolders(folders: FolderItem[], parentId: number | null) {
   for (const folder of folders) {
     parentById.set(folder.id, parentId);
@@ -188,4 +202,8 @@ export function useWorkspace() {
     filteredChildren,
     breadcrumbs,
   };
+}
+
+export function __resetWorkspaceStateForTests() {
+  resetWorkspaceState();
 }

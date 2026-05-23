@@ -11,6 +11,9 @@
     "dev:frontend": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/frontend dev",
     "db:generate": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/backend db:generate",
     "db:migrate": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/backend db:migrate",
-    "db:seed": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/backend db:seed"
+    "db:seed": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/backend db:seed",
+    "test:backend": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/backend test",
+    "test:frontend": "PATH=\"$HOME/.bun/bin:$PATH\" bun run --cwd apps/frontend test",
+    "test": "PATH=\"$HOME/.bun/bin:$PATH\" bun run test:backend && PATH=\"$HOME/.bun/bin:$PATH\" bun run test:frontend"
   }
 }

@@ -6,7 +6,8 @@
     "dev": "bun --watch src/main.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "bun run src/scripts/seed.ts"
+    "db:seed": "bun run src/scripts/seed.ts",
+    "test": "bun test"
   },
   "dependencies": {
     "drizzle-orm": "^0.33.0",
