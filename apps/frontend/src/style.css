@@ -248,6 +248,11 @@ body {
   font-size: 12px;
 }
 
+.breadcrumb .home-link {
+  font-weight: 700;
+  color: #1d4f95;
+}
+
 .toolbar-actions {
   display: flex;
   align-items: center;
@@ -263,6 +268,30 @@ body {
   min-width: 28px;
   padding: 0 8px;
   font-size: 12px;
+}
+
+.toolbar-actions button.is-active {
+  border-color: #9bb5dc;
+  background: #dfeafc;
+  color: #1f4d93;
+}
+
+.sort-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #5b6575;
+}
+
+.sort-select {
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: #4b5563;
+  font-size: 12px;
+  padding: 0 6px;
 }
 
 .content-scroll {
@@ -383,6 +412,11 @@ body {
   background: transparent;
 }
 
+.entry-card.is-active {
+  border-color: #96b6e3;
+  background: #e8f1ff;
+}
+
 .entry-card:hover {
   border-color: #cfd8e6;
   background: #fff;
@@ -390,6 +424,38 @@ body {
 
 .folder-card {
   cursor: pointer;
+}
+
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.content-list .entry-card {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dde3ee;
+  background: #fff;
+}
+
+.content-list .entry-top {
+  display: contents;
+}
+
+.content-list .entry-icon {
+  font-size: 20px;
+}
+
+.content-list .entry-name {
+  margin: 0;
+}
+
+.content-list .entry-meta,
+.content-list .file-badge {
+  justify-self: end;
 }
 
 .entry-top {

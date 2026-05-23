@@ -35,6 +35,9 @@ const navGroups = [
 
 const uploaderRef = ref<HTMLInputElement | null>(null);
 const showCreateFolderModal = ref(false);
+const viewMode = ref<"grid" | "list">("grid");
+const sortBy = ref<"name-asc" | "name-desc" | "size-desc">("name-asc");
+const activeEntryKey = ref<string | null>(null);
 
 function openUploader() {
   uploaderRef.value?.click();
@@ -71,6 +74,46 @@ async function onFilePicked(event: Event) {
   await workspace.uploadToSelectedFolder(file);
   input.value = "";
 }
+
+function onGoHome() {
+  const firstRootId = workspace.roots.value[0]?.id;
+
+  if (firstRootId) {
+    workspace.selectFolder(firstRootId);
+  }
+}
+
+function onSelectEntry(entryKey: string) {
+  activeEntryKey.value = entryKey;
+}
+
+const sortedSubfolders = computed(() => {
+  const list = [...workspace.filteredChildren.value.subfolders];
+
+  if (sortBy.value === "name-desc") {
+    return list.sort((a, b) => b.name.localeCompare(a.name));
+  }
+
+  return list.sort((a, b) => a.name.localeCompare(b.name));
+});
+
+const sortedFiles = computed(() => {
+  const list = [...workspace.filteredChildren.value.files];
+
+  if (sortBy.value === "name-desc") {
+    return list.sort((a, b) =>
+      `${b.name}.${b.extension}`.localeCompare(`${a.name}.${a.extension}`)
+    );
+  }
+
+  if (sortBy.value === "size-desc") {
+    return list.sort((a, b) => b.size - a.size);
+  }
+
+  return list.sort((a, b) =>
+    `${a.name}.${a.extension}`.localeCompare(`${b.name}.${b.extension}`)
+  );
+});
 </script>
 
 <template>
@@ -128,7 +171,7 @@ async function onFilePicked(event: Event) {
         <section class="content-panel">
           <div class="content-toprow">
             <nav class="breadcrumb" aria-label="Breadcrumb">
-              <span>Home</span>
+              <button class="home-link" @click="onGoHome">Home</button>
               <template v-for="crumb in workspace.breadcrumbs.value" :key="crumb.id">
                 <span class="sep">›</span>
                 <button @click="workspace.selectFolder(crumb.id)">{{ crumb.name }}</button>
@@ -136,18 +179,40 @@ async function onFilePicked(event: Event) {
             </nav>
 
             <div class="toolbar-actions">
-              <button title="Grid view">▦</button>
-              <button title="List view">☰</button>
-              <button title="Sort">Sort</button>
+              <button
+                :class="{ 'is-active': viewMode === 'grid' }"
+                title="Grid view"
+                @click="viewMode = 'grid'"
+              >
+                ▦
+              </button>
+              <button
+                :class="{ 'is-active': viewMode === 'list' }"
+                title="List view"
+                @click="viewMode = 'list'"
+              >
+                ☰
+              </button>
+              <label class="sort-select-wrap">
+                <span>Sort</span>
+                <select v-model="sortBy" class="sort-select">
+                  <option value="name-asc">Name A-Z</option>
+                  <option value="name-desc">Name Z-A</option>
+                  <option value="size-desc">Size High-Low</option>
+                </select>
+              </label>
             </div>
           </div>
 
           <div class="content-scroll">
             <ContentView
               :folder-name="activeFolderName"
-              :subfolders="workspace.filteredChildren.value.subfolders"
-              :files="workspace.filteredChildren.value.files"
+              :subfolders="sortedSubfolders"
+              :files="sortedFiles"
+              :view-mode="viewMode"
+              :active-entry-key="activeEntryKey"
               @open-folder="workspace.selectFolder"
+              @select-entry="onSelectEntry"
             />
           </div>
         </section>

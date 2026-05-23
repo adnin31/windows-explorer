@@ -6,10 +6,13 @@ const props = defineProps<{
   folderName: string;
   subfolders: FolderItem[];
   files: FileItem[];
+  viewMode: "grid" | "list";
+  activeEntryKey: string | null;
 }>();
 
 const emit = defineEmits<{
   openFolder: [folderId: number];
+  selectEntry: [entryKey: string];
 }>();
 
 const hasData = computed(
@@ -46,12 +49,14 @@ function prettyBytes(bytes: number) {
       Folder ini belum punya isi.
     </div>
 
-    <div v-else class="content-grid">
+    <div v-else :class="viewMode === 'grid' ? 'content-grid' : 'content-list'">
       <article
         v-for="folder in subfolders"
         :key="`folder-${folder.id}`"
         class="entry-card folder-card"
-        @click="emit('openFolder', folder.id)"
+        :class="{ 'is-active': activeEntryKey === `folder-${folder.id}` }"
+        @click="emit('selectEntry', `folder-${folder.id}`)"
+        @dblclick="emit('openFolder', folder.id)"
       >
         <div class="entry-icon">📁</div>
         <h3 class="entry-name">{{ folder.name }}</h3>
@@ -62,6 +67,8 @@ function prettyBytes(bytes: number) {
         v-for="file in files"
         :key="`file-${file.id}`"
         class="entry-card file-card"
+        :class="{ 'is-active': activeEntryKey === `file-${file.id}` }"
+        @click="emit('selectEntry', `file-${file.id}`)"
       >
         <div class="entry-top">
           <div class="entry-icon">📄</div>
