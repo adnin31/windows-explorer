@@ -1,0 +1,8 @@
+{
+  "name": "@windows-explorer/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}
